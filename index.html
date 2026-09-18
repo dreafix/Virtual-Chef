@@ -278,7 +278,40 @@
 
             <div id="userBlock" class="user-block hidden">
 
+                <!-- 👑 АДМИН-ПАНЕЛЬ -->
+                <div class="admin-panel hidden" id="adminPanel">
+                    <div class="admin-panel-header">
+                        <h2>👑 Админ-панель</h2>
+                        <span class="admin-badge">только для админов</span>
+                    </div>
+
+                    <!-- 🎁 НАЧИСЛЕНИЕ -->
+                    <div class="admin-section">
+                        <h3>🎁 Начислить звёзды</h3>
+                        <p class="admin-desc">Введи email и сколько звёзд подарить</p>
+
+                        <div class="admin-form">
+                            <input type="email" id="adminEmail" placeholder="Email получателя">
+                            <input type="number" id="adminAmount" placeholder="Сколько ⭐" min="1" max="999999">
+                            <button id="adminGiveStars">Начислить</button>
+                        </div>
+                    </div>
+
+                    <!-- 💀 ОТОБРАТЬ -->
+                    <div class="admin-section admin-section-take">
+                        <h3>💀 Отобрать звёзды</h3>
+                        <p class="admin-desc">Введи email и сколько звёзд отобрать</p>
+
+                        <div class="admin-form">
+                            <input type="email" id="adminTakeEmail" placeholder="Email жертвы">
+                            <input type="number" id="adminTakeAmount" placeholder="Сколько ⭐" min="1" max="999999">
+                            <button id="adminTakeStars" class="admin-btn-take">Отобрать</button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="profile-card">
+
                     <div class="profile-avatar" id="profileAvatar">👨‍🍳</div>
                     <div class="profile-info">
                         <h2 id="profileName">—</h2>
