@@ -2,15 +2,21 @@ console.log("✅ script.js загружен");
 
 /* ================= ОСОБЫЕ ПОЛЬЗОВАТЕЛИ ================= */
 
-const SUPER_USERS = [
+// 👑 АДМИНЫ — видят админ-панель, могут начислять звёзды
+const ADMIN_EMAILS = [
     "ivan.dumenov@mail.ru",
-    "donaterkir@gmail.com",
+    "donaterkir@gmail.com"
+];
+
+// 🤝 ДРУЗЬЯ — все достижения + все звёзды, но БЕЗ админ-панели
+const FRIEND_EMAILS = [
     "dumenovandrej7@gmail.com"
 ];
 
-const ADMIN_EMAILS = [
-    "ivan.dumenov@mail.ru",
-    "dumenovandrej7@gmail.com"
+// ⭐ СУПЕР-ЮЗЕРЫ — все достижения сразу (админы + друзья)
+const SUPER_USERS = [
+    ...ADMIN_EMAILS,
+    ...FRIEND_EMAILS
 ];
 
 function isSuperUser(email) {
@@ -21,6 +27,11 @@ function isSuperUser(email) {
 function isAdminUser(email) {
     if (!email) return false;
     return ADMIN_EMAILS.map(e => e.toLowerCase()).includes(email.toLowerCase());
+}
+
+function isFriendUser(email) {
+    if (!email) return false;
+    return FRIEND_EMAILS.map(e => e.toLowerCase()).includes(email.toLowerCase());
 }
 
 
@@ -453,10 +464,12 @@ function renderProfile() {
     document.querySelector("#profileAvatar").textContent = freshUser.name[0].toUpperCase();
 
     const isAdmin = isAdminUser(freshUser.email);
+    const isFriend = isFriendUser(freshUser.email);
     const isSuper = isSuperUser(freshUser.email);
 
     let displayName = freshUser.name;
     if (isAdmin) displayName = "👑 " + freshUser.name;
+    else if (isFriend) displayName = "🤝 " + freshUser.name;
     else if (isSuper) displayName = "⭐ " + freshUser.name;
 
     document.querySelector("#profileName").textContent = displayName;
@@ -975,3 +988,209 @@ document.querySelector("#calendarBtn")?.addEventListener("click", () => {
 
 updateStarsBalance();
 recalcBalance();
+
+
+/* ================= АДМИН-ПАНЕЛЬ В ПРОФИЛЕ ================= */
+
+const GIFTS_KEY = "vc_admin_gifts";      // начисления
+const TAKES_KEY = "vc_admin_takes";      // отборы
+
+// Получить начисления
+function getGifts() {
+    return JSON.parse(localStorage.getItem(GIFTS_KEY) || "[]");
+}
+function saveGifts(gifts) {
+    localStorage.setItem(GIFTS_KEY, JSON.stringify(gifts));
+}
+
+// Получить отборы
+function getTakes() {
+    return JSON.parse(localStorage.getItem(TAKES_KEY) || "[]");
+}
+function saveTakes(takes) {
+    localStorage.setItem(TAKES_KEY, JSON.stringify(takes));
+}
+
+// Показать админ-панель только админам
+function updateAdminPanel() {
+    const panel = document.querySelector("#adminPanel");
+    if (!panel) return;
+
+    const user = currentUser();
+    if (user && isAdminUser(user.email)) {
+        panel.classList.remove("hidden");
+    } else {
+        panel.classList.add("hidden");
+    }
+}
+
+/* ---------- 🎁 НАЧИСЛЕНИЕ ЗВЁЗД ---------- */
+document.querySelector("#adminGiveStars")?.addEventListener("click", () => {
+    const user = currentUser();
+    if (!user || !isAdminUser(user.email)) return;
+
+    const emailInput = document.querySelector("#adminEmail");
+    const amountInput = document.querySelector("#adminAmount");
+
+    const email = emailInput.value.trim().toLowerCase();
+    const amount = parseInt(amountInput.value);
+
+    if (!email || !email.includes("@") || email.length < 5) {
+        showToast("❌ Введите корректный email");
+        return;
+    }
+
+    if (!amount || amount < 1) {
+        showToast("❌ Введите количество (от 1)");
+        return;
+    }
+
+    if (amount > 999999) {
+        showToast("❌ Максимум 999999");
+        return;
+    }
+
+    // Если это СВОЙ email — сразу на баланс
+    if (user.email.toLowerCase() === email) {
+        const current = parseInt(localStorage.getItem("vc_stars") || "0");
+        localStorage.setItem("vc_stars", String(current + amount));
+        updateStarsBalance();
+        if (typeof renderRewards === "function") renderRewards();
+        showToast(`👑 +${amount} ⭐ начислено вам!`);
+    } else {
+        const gifts = getGifts();
+        gifts.push({
+            email: email,
+            amount: amount,
+            t: Date.now()
+        });
+        saveGifts(gifts);
+        showToast(`✅ Записано: ${email} получит ${amount} ⭐ при входе`);
+    }
+
+    emailInput.value = "";
+    amountInput.value = "";
+});
+
+/* ---------- 💀 ОТБОР ЗВЁЗД ---------- */
+document.querySelector("#adminTakeStars")?.addEventListener("click", () => {
+    const user = currentUser();
+    if (!user || !isAdminUser(user.email)) return;
+
+    const emailInput = document.querySelector("#adminTakeEmail");
+    const amountInput = document.querySelector("#adminTakeAmount");
+
+    const email = emailInput.value.trim().toLowerCase();
+    const amount = parseInt(amountInput.value);
+
+    if (!email || !email.includes("@") || email.length < 5) {
+        showToast("❌ Введите корректный email");
+        return;
+    }
+
+    if (!amount || amount < 1) {
+        showToast("❌ Введите количество (от 1)");
+        return;
+    }
+
+    if (amount > 999999) {
+        showToast("❌ Максимум 999999");
+        return;
+    }
+
+    // Если это СВОЙ email — сразу списываем
+    if (user.email.toLowerCase() === email) {
+        const current = parseInt(localStorage.getItem("vc_stars") || "0");
+        const newVal = Math.max(0, current - amount);
+        localStorage.setItem("vc_stars", String(newVal));
+        updateStarsBalance();
+        if (typeof renderRewards === "function") renderRewards();
+        showToast(`💀 -${amount} ⭐ списано с вас`);
+    } else {
+        const takes = getTakes();
+        takes.push({
+            email: email,
+            amount: amount,
+            t: Date.now()
+        });
+        saveTakes(takes);
+        showToast(`✅ Записано: ${email} потеряет ${amount} ⭐ при входе`);
+    }
+
+    emailInput.value = "";
+    amountInput.value = "";
+});
+
+/* ---------- АКТИВАЦИЯ ПРИ ВХОДЕ ---------- */
+function checkMyGifts() {
+    const user = currentUser();
+    if (!user) return;
+
+    const myEmail = user.email.toLowerCase();
+    let hasChanges = false;
+    let message = "";
+
+    // 🎁 Начисления
+    const gifts = getGifts();
+    const myGifts = gifts.filter(g => g.email === myEmail);
+    if (myGifts.length) {
+        let total = 0;
+        myGifts.forEach(g => total += g.amount);
+
+        const current = parseInt(localStorage.getItem("vc_stars") || "0");
+        localStorage.setItem("vc_stars", String(current + total));
+
+        const remaining = gifts.filter(g => g.email !== myEmail);
+        saveGifts(remaining);
+
+        hasChanges = true;
+        message += `🎁 +${total} ⭐ `;
+    }
+
+    // 💀 Отборы
+    const takes = getTakes();
+    const myTakes = takes.filter(t => t.email === myEmail);
+    if (myTakes.length) {
+        let total = 0;
+        myTakes.forEach(t => total += t.amount);
+
+        const current = parseInt(localStorage.getItem("vc_stars") || "0");
+        const newVal = Math.max(0, current - total);
+        localStorage.setItem("vc_stars", String(newVal));
+
+        const remaining = takes.filter(t => t.email !== myEmail);
+        saveTakes(remaining);
+
+        hasChanges = true;
+        message += `💀 -${total} ⭐ `;
+    }
+
+    if (hasChanges) {
+        updateStarsBalance();
+        if (typeof renderRewards === "function") renderRewards();
+        setTimeout(() => showToast(message), 800);
+    }
+}
+
+// Обновляем панель при отрисовке профиля
+const _origRenderProfile = renderProfile;
+window.renderProfile = function () {
+    _origRenderProfile();
+    updateAdminPanel();
+};
+
+// Проверяем подарки/отборы при загрузке
+window.addEventListener("load", () => {
+    setTimeout(checkMyGifts, 1500);
+});
+
+// И при смене пользователя
+async function initGiftWatcher() {
+    while (!window.firebaseAuth) {
+        await new Promise(r => setTimeout(r, 100));
+    }
+    window.firebaseAuth.onAuthStateChanged(window.firebaseAuth.auth, () => {
+        setTimeout(checkMyGifts, 500);
+    });
+}
+initGiftWatcher();
