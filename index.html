@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Виртуальный Шеф — готовь вкусно</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <header class="topbar">
+        <div class="container nav">
+
+            <a class="brand" href="#" data-target="home">
+                <span class="chef-logo">
+                    <img src="images/logo.png" alt="Виртуальный Шеф" width="42" height="42">
+                </span>
+                <span>
+                    <b>Виртуальный <i>Шеф</i></b>
+                    <small>Вкусные идеи для каждого</small>
+                </span>
+            </a>
+
+            <nav>
+                <button class="nav-link active" data-target="home">
+                    🏠︎ <span>Главная</span>
+                </button>
+
+                <button class="nav-link" data-target="fridge">
+                    ❄ <span>Холодильник</span>
+                </button>
+
+                <button class="nav-link" data-target="recipes">
+                    🕮 <span>Рецепты</span>
+                </button>
+            </nav>
+
+            <div class="nav-actions">
+                <div class="stars-balance" title="Ваш баланс звёзд">
+                    <span class="stars-icon">⭐</span>
+                    <span class="stars-count" id="starsCount">0</span>
+                </div>
+                <button class="calendar-btn" title="Календарь наград" id="calendarBtn">📅</button>
+                <button title="Поиск" id="focusSearch">⌕</button>
+                <button title="Избранное" id="openFavorites">♡</button>
+                <button title="Профиль" id="profileBtn">◉</button>
+            </div>
+
+        </div>
+    </header>
+
+
+    <!-- ================= ГЛАВНАЯ ================= -->
+    <main id="page-home" class="page active">
+
+        <section class="hero">
+            <div class="hero-bg"></div>
+
+            <div class="hero-overlay">
+                <div class="container hero-content">
+                    <div class="hero-copy">
+
+                        <h1>Виртуальный <span>Шеф</span></h1>
+                        <h2>Готовь вкусно. Легко. С удовольствием!</h2>
+
+                        <p>
+                            Твой персональный помощник на кухне. Подскажет, что приготовить<br>
+                            из того, что есть в холодильнике, и подберёт лучшие рецепты<br>
+                            на любой вкус!
+                        </p>
+
+                        <form class="search" id="searchForm">
+                            <span>⌕</span>
+                            <input id="searchInput" placeholder="Что приготовить сегодня?">
+                            <button>Найти рецепт</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="benefits">
+            <div class="container benefit-grid">
+
+                <div>
+                    <strong class="round">♨</strong>
+                    <span>
+                        <b>Умные рецепты</b>
+                        <small>Подбор блюд под ваш вкус<br>и продукты</small>
+                    </span>
+                </div>
+
+                <div>
+                    <strong class="round">❄</strong>
+                    <span>
+                        <b>Проверенные продукты</b>
+                        <small>Только из качественных<br>и безопасных продуктов</small>
+                    </span>
+                </div>
+
+                <div>
+                    <strong class="round">♡</strong>
+                    <span>
+                        <b>Экономия времени</b>
+                        <small>Быстрые и простые<br>рецепты</small>
+                    </span>
+                </div>
+
+                <div>
+                    <strong class="round">👥︎</strong>
+                    <span>
+                        <b>Для всей семьи</b>
+                        <small>Блюда на любой вкус<br>и возраст</small>
+                    </span>
+                </div>
+
+            </div>
+        </section>
+
+
+        <section class="popular container">
+
+            <div class="section-title">
+                <h2>🔥 Популярные рецепты</h2>
+                <button class="text-btn" id="allRecipes">Все рецепты →</button>
+            </div>
+
+            <div class="content-grid">
+
+                <div class="recipe-grid" id="recipeGrid"></div>
+
+                <aside class="fridge-card">
+                    <div>
+                        <span class="fridge-icon">❄</span>
+                        <h3>Холодильник<br>подскажет!</h3>
+                        <p>
+                            Не знаете, что приготовить<br>
+                            из имеющихся продуктов?<br>
+                            Просто загляните в холодильник<br>
+                            — мы поможем!
+                        </p>
+                        <button id="fridgeOpen">Перейти в холодильник →</button>
+                    </div>
+                    <div class="fridge-art"><br></div>
+                </aside>
+
+            </div>
+
+        </section>
+
+
+        <section class="taste">
+            <div class="container">
+
+                <div class="section-title">
+                    <h2>Рецепты на любой вкус</h2>
+                </div>
+
+                <div class="chips" id="chips">
+                    <button class="chip active" data-cat="Все">Все</button>
+                    <button class="chip" data-cat="Завтраки">Завтраки</button>
+                    <button class="chip" data-cat="Обеды">Обеды</button>
+                    <button class="chip" data-cat="Ужины">Ужины</button>
+                    <button class="chip" data-cat="Десерты">Десерты</button>
+                    <button class="chip" data-cat="Вегетарианские">Вегетарианские</button>
+                    <button class="chip" data-cat="Праздничные">Праздничные</button>
+                </div>
+
+                <div class="signature">Начни готовить сегодня! <br></div>
+
+            </div>
+        </section>
+
+    </main>
+
+
+    <!-- ================= ХОЛОДИЛЬНИК ================= -->
+    <main id="page-fridge" class="page">
+
+        <section class="fridge-hero">
+            <div class="fridge-hero-overlay">
+                <div class="container fridge-hero-content">
+                    <div class="fridge-hero-copy">
+                        <h1>Что у вас есть<br><span>в холодильнике?</span></h1>
+                        <p>Напишите, какие продукты у вас есть, и мы подберём<br>для вас вкусные рецепты из того, что
+                            уже есть!</p>
+
+                        <form class="fridge-search" id="fridgeSearchForm">
+                            <span class="fridge-search-icon">⌕</span>
+                            <input id="fridgeInput" placeholder="Например: курица, помидоры, сыр, макароны...">
+                            <button type="submit" aria-label="Найти">⌕</button>
+                        </form>
+
+                        <div class="fridge-handwrite"><br></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="fridge-results container">
+            <div class="fridge-results-head">
+                <h2>🔥 Рецепты, которые можно приготовить<br>из ваших продуктов</h2>
+                <button class="text-btn" id="allRecipesFromFridge">Все рецепты →</button>
+            </div>
+
+            <div class="recipe-grid" id="fridgeResults"></div>
+        </section>
+
+    </main>
+
+
+    <!-- ================= РЕЦЕПТЫ ================= -->
+    <main id="page-recipes" class="page">
+
+        <section class="page-hero">
+            <div class="container">
+                <h1>🕮 Все рецепты</h1>
+                <p>Полный каталог блюд от Виртуального Шефа.</p>
+            </div>
+        </section>
+
+        <section class="container page-body">
+
+            <div class="chips" id="chipsPage" style="margin-bottom:22px;">
+                <button class="chip active" data-cat="Все">Все</button>
+                <button class="chip" data-cat="Завтраки">Завтраки</button>
+                <button class="chip" data-cat="Обеды">Обеды</button>
+                <button class="chip" data-cat="Ужины">Ужины</button>
+                <button class="chip" data-cat="Десерты">Десерты</button>
+                <button class="chip" data-cat="Вегетарианские">Вегетарианские</button>
+                <button class="chip" data-cat="Праздничные">Праздничные</button>
+            </div>
+
+            <div class="recipe-grid" id="recipesPageGrid"></div>
+
+        </section>
+
+    </main>
+
+    <!-- ================= ПРОФИЛЬ ================= -->
+    <main id="page-profile" class="page">
+
+        <section class="page-hero profile-hero">
+            <div class="container">
+                <h1>◉ Ваш профиль</h1>
+                <p>Личный кабинет Виртуального Шефа</p>
+            </div>
+        </section>
+
+        <section class="container page-body">
+
+            <div id="authBlock" class="auth-block hidden">
+                <div class="auth-tabs">
+                    <button class="auth-tab active" data-auth="login">Вход</button>
+                    <button class="auth-tab" data-auth="register">Регистрация</button>
+                </div>
+
+                <form id="loginForm" class="auth-form">
+                    <input type="email" id="loginEmail" placeholder="Email" required>
+                    <input type="password" id="loginPassword" placeholder="Пароль" required>
+                    <button type="submit">Войти</button>
+                    <p class="auth-error" id="loginError"></p>
+                </form>
+
+                <form id="registerForm" class="auth-form hidden">
+                    <input type="text" id="regName" placeholder="Ваше имя" required minlength="2">
+                    <input type="email" id="regEmail" placeholder="Email" required>
+                    <input type="password" id="regPassword" placeholder="Пароль (мин. 4 символа)" required
+                        minlength="4">
+                    <button type="submit">Создать аккаунт</button>
+                    <p class="auth-error" id="regError"></p>
+                </form>
+            </div>
+
+            <div id="userBlock" class="user-block hidden">
+
+                <div class="profile-card">
+                    <div class="profile-avatar" id="profileAvatar">👨‍🍳</div>
+                    <div class="profile-info">
+                        <h2 id="profileName">—</h2>
+                        <p id="profileEmail" class="muted">—</p>
+                        <p class="muted">С нами с <span id="profileDate">—</span></p>
+                    </div>
+                    <button class="logout-btn" id="logoutBtn">Выйти</button>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-icon">🍳</span>
+                        <b id="statOpened">0</b>
+                        <small>Рецептов открыто</small>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-icon">❤️</span>
+                        <b id="statFavs">0</b>
+                        <small>В избранном</small>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-icon">🏆</span>
+                        <b id="statAchv">0</b>
+                        <small>Достижений</small>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-icon">📅</span>
+                        <b id="statDays">1</b>
+                        <small>Дней на сайте</small>
+                    </div>
+                </div>
+
+                <h2 class="block-title">🏆 Достижения</h2>
+                <div class="achievements-grid" id="achievementsGrid"></div>
+
+                <h2 class="block-title">❤️ Избранные рецепты</h2>
+                <div class="recipe-grid" id="profileFavorites"></div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================= КАЛЕНДАРЬ НАГРАД ================= -->
+    <main id="page-rewards" class="page">
+
+        <section class="page-hero rewards-hero">
+            <div class="container">
+                <h1>📅 Календарь наград</h1>
+                <p>Заходите каждый день и получайте звёзды!</p>
+            </div>
+        </section>
+
+        <section class="container page-body">
+
+            <div class="rewards-stats">
+                <div>
+                    <b id="rewardsBalance">0</b>
+                    <small>⭐ Ваш баланс</small>
+                </div>
+                <div>
+                    <b id="rewardsMonthTotal">0</b>
+                    <small>⭐ За этот месяц</small>
+                </div>
+                <div>
+                    <b id="rewardsStreak">0</b>
+                    <small>🔥 Дней подряд</small>
+                </div>
+            </div>
+
+            <div class="rewards-month-title" id="rewardsTitle">Сентябрь 2026</div>
+
+            <div class="rewards-calendar-wrap">
+                <table class="rewards-calendar" id="rewardsCalendar">
+                    <thead>
+                        <tr>
+                            <th>Пн</th>
+                            <th>Вт</th>
+                            <th>Ср</th>
+                            <th>Чт</th>
+                            <th>Пт</th>
+                            <th>Сб</th>
+                            <th>Вс</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rewardsBody"></tbody>
+                </table>
+            </div>
+
+            <div class="rewards-hint">
+                💡 Заходите каждый день и нажимайте на сегодняшний день, чтобы забрать звёзды.<br>
+                Будни: <b>+15 ⭐</b> · Выходные: <b>+30 ⭐</b>
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <div class="modal hidden" id="modal">
+        <div class="modal-box">
+            <button class="close" id="closeModal">×</button>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCYCVwuK_G24YqwnyyDTKODxFLMJuvqkLM",
+            authDomain: "virtual-chef-b8dae.firebaseapp.com",
+            projectId: "virtual-chef-b8dae",
+            storageBucket: "virtual-chef-b8dae.firebasestorage.app",
+            messagingSenderId: "9943912495",
+            appId: "1:9943912495:web:c983c5fa6556b4fb93b6da"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        window.firebaseAuth = {
+            auth: auth,
+            createUserWithEmailAndPassword: createUserWithEmailAndPassword,
+            signInWithEmailAndPassword: signInWithEmailAndPassword,
+            signOut: signOut,
+            onAuthStateChanged: onAuthStateChanged,
+            updateProfile: updateProfile
+        };
+
+        console.log("✅ Firebase подключён");
+    </script>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
