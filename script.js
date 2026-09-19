@@ -4,13 +4,13 @@ console.log("✅ script.js загружен");
 
 // 👑 АДМИНЫ — видят админ-панель, могут начислять звёзды
 const ADMIN_EMAILS = [
-    "ivan.dumenov@mail.ru",
-    "donaterkir@gmail.com"
+    "ivan.dumenov@mail.ru"
 ];
 
 // 🤝 ДРУЗЬЯ — все достижения + все звёзды, но БЕЗ админ-панели
 const FRIEND_EMAILS = [
-    "dumenovandrej7@gmail.com"
+    "dumenovandrej7@gmail.com",
+    "donaterkir@gmail.com"
 ];
 
 // ⭐ СУПЕР-ЮЗЕРЫ — все достижения сразу (админы + друзья)
